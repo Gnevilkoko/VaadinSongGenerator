@@ -13,12 +13,12 @@ public class YamlReader implements Reader {
 
     @Override
     public String read() {
-        File sourceFile = new File(filePath);
+        File sourceFile = new File(getFullPath());
         if(!sourceFile.exists()){
             initIfNotExist();
         }
 
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(getFullPath()))) {
             StringBuilder sb = new StringBuilder();
             String line;
             while ((line = br.readLine()) != null) {
@@ -32,7 +32,7 @@ public class YamlReader implements Reader {
 
     @Override
     public void initIfNotExist() {
-        try (InputStream inputStream = Application.class.getResourceAsStream("/" + filePath);
+        try (InputStream inputStream = Application.class.getResourceAsStream(File.separator + "yamls" + File.separator + filePath);
              FileOutputStream fileOutputStream = new FileOutputStream(filePath)) {
             byte[] buffer = new byte[1024];
             int bytesRead;
@@ -40,5 +40,9 @@ public class YamlReader implements Reader {
                 fileOutputStream.write(buffer, 0, bytesRead);
             }
         } catch (IOException ignore) {}
+    }
+
+    private String getFullPath(){
+        return System.getProperty("user.dir")+File.separator+filePath;
     }
 }

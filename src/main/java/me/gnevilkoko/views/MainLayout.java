@@ -11,7 +11,6 @@ import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import me.gnevilkoko.views.myview.MyViewView;
 import org.vaadin.lineawesome.LineAwesomeIcon;
 
 /**
@@ -50,7 +49,7 @@ public class MainLayout extends AppLayout {
     private SideNav createNavigation() {
         SideNav nav = new SideNav();
 
-        nav.addItem(new SideNavItem("My View", MyViewView.class, LineAwesomeIcon.PENCIL_RULER_SOLID.create()));
+        nav.addItem(new SideNavItem("My View", SongSettingsView.class, LineAwesomeIcon.PENCIL_RULER_SOLID.create()));
 
         return nav;
     }
