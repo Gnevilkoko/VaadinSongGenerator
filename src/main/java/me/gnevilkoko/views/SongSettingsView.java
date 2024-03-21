@@ -8,9 +8,7 @@ import com.vaadin.flow.router.Route;
 @Route(value = "app", layout = MainLayout.class)
 //@RouteAlias(value = "", layout = MainLayout.class)
 public class SongSettingsView extends HorizontalLayout {
-
     public SongSettingsView() {
         setSizeFull();
-
     }
 }

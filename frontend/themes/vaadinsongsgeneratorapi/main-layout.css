@@ -20,7 +20,7 @@ vaadin-side-nav-item vaadin-icon {
 }
 
 [theme~="dark"] {
-    --lumo-base-color: hsl(245, 15%, 15%);
+    --lumo-base-color: hsl(245, 10%, 10%);
     --lumo-shade-5pct: rgba(54, 61, 73, 0.05);
     --lumo-shade-10pct: rgba(54, 61, 73, 0.1);
     --lumo-shade-20pct: rgba(54, 61, 73, 0.2);
