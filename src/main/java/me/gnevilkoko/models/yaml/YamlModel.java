@@ -10,8 +10,16 @@ public class YamlModel extends ModelBase {
     public YamlModel(Map<String, Object> data) {
         this.data = data;
     }
+    public YamlModel(YamlModel yamlModel){
+        this.data = yamlModel.getData();
+    }
 
     public Map<String, Object> getData() {
         return data;
+    }
+
+    @Override
+    public String toString() {
+        return data.toString();
     }
 }

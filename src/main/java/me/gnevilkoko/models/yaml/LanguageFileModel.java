@@ -7,12 +7,16 @@ public class LanguageFileModel extends YamlModel {
         super(data);
     }
 
+    public LanguageFileModel(YamlModel yamlModel) {
+        super(yamlModel);
+    }
+
     public String getAppName(){
-        return (String) getData().get(Names.APP_NAME);
+        return (String) getData().get(Names.APP_NAME.getKey());
     }
 
     public String getEnterNickname(){
-        return (String) getData().get(Names.ENTER_NICKNAME);
+        return (String) getData().get(Names.ENTER_NICKNAME.getKey());
     }
 
     public enum Names {

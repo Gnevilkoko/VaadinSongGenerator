@@ -9,4 +9,8 @@ public abstract class ViewModelBase {
     public abstract void loadLanguageText();
 
     public void afterNavigation(AfterNavigationEvent event){}
+
+    public void beforeEnter(BeforeEnterEvent event){}
+
+    public String getPageTitle(){ return "UNKNOWN TITLE";}
 }

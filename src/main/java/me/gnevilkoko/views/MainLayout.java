@@ -9,9 +9,7 @@ import com.vaadin.flow.component.html.Header;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
-import com.vaadin.flow.router.AfterNavigationEvent;
-import com.vaadin.flow.router.AfterNavigationObserver;
-import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.*;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import me.gnevilkoko.viewmodels.MainViewModel;
 import org.vaadin.lineawesome.LineAwesomeIcon;
@@ -19,7 +17,7 @@ import org.vaadin.lineawesome.LineAwesomeIcon;
 /**
  * The main view is a top-level placeholder for other views.
  */
-public class MainLayout extends AppLayout implements AfterNavigationObserver {
+public class MainLayout extends AppLayout implements AfterNavigationObserver, BeforeEnterObserver {
 
 
     private H2 viewTitle;
@@ -28,53 +26,16 @@ public class MainLayout extends AppLayout implements AfterNavigationObserver {
     public MainLayout() {
         model = new MainViewModel(this);
         setPrimarySection(Section.DRAWER);
-        addDrawerContent();
         addHeaderContent();
     }
 
     private void addHeaderContent() {
-        DrawerToggle toggle = new DrawerToggle();
-        toggle.setAriaLabel("Menu toggle");
-
         viewTitle = new H2();
+        viewTitle.setSizeFull();
+        viewTitle.addClassNames(LumoUtility.TextAlignment.CENTER);
         viewTitle.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
 
-        addToNavbar(true, toggle, viewTitle);
-    }
-
-    private void addDrawerContent() {
-        H1 appName = new H1("My App");
-        appName.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
-        Header header = new Header(appName);
-
-        Scroller scroller = new Scroller(createNavigation());
-
-        addToDrawer(header, scroller, createFooter());
-    }
-
-    private SideNav createNavigation() {
-        SideNav nav = new SideNav();
-
-        nav.addItem(new SideNavItem("My View", SongSettingsView.class, LineAwesomeIcon.PENCIL_RULER_SOLID.create()));
-
-        return nav;
-    }
-
-    private Footer createFooter() {
-        Footer layout = new Footer();
-
-        return layout;
-    }
-
-    @Override
-    protected void afterNavigation() {
-        super.afterNavigation();
-        viewTitle.setText(getCurrentPageTitle());
-    }
-
-    private String getCurrentPageTitle() {
-        PageTitle title = getContent().getClass().getAnnotation(PageTitle.class);
-        return title == null ? "" : title.value();
+        addToNavbar(true, viewTitle);
     }
 
     public H2 getViewTitle() {
@@ -83,6 +44,13 @@ public class MainLayout extends AppLayout implements AfterNavigationObserver {
 
     @Override
     public void afterNavigation(AfterNavigationEvent afterNavigationEvent) {
-        model.afterNavigation();
+        model.afterNavigation(afterNavigationEvent);
+
+        super.afterNavigation();
+    }
+
+    @Override
+    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+        model.beforeEnter(beforeEnterEvent);
     }
 }

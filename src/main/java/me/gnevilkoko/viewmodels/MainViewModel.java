@@ -1,9 +1,11 @@
 package me.gnevilkoko.viewmodels;
 
 import com.vaadin.flow.router.AfterNavigationEvent;
+import com.vaadin.flow.router.BeforeEnterEvent;
 import me.gnevilkoko.data.YamlParser;
 import me.gnevilkoko.data.YamlReader;
 import me.gnevilkoko.models.yaml.LanguageFileModel;
+import me.gnevilkoko.models.yaml.YamlModel;
 import me.gnevilkoko.views.MainLayout;
 import me.gnevilkoko.views.SongSettingsView;
 
@@ -13,7 +15,9 @@ public class MainViewModel extends ViewModelBase {
 
     public MainViewModel(MainLayout view) {
         this.view = view;
-        languageFileModel = (LanguageFileModel) new YamlParser().parse(new YamlReader("language.yml"));
+
+        YamlModel yamlModel = new YamlParser().parse(new YamlReader("language.yml"));
+        languageFileModel = new LanguageFileModel(yamlModel);
     }
 
     @Override
@@ -26,6 +30,5 @@ public class MainViewModel extends ViewModelBase {
     @Override
     public void loadLanguageText() {
         view.getViewTitle().setText(languageFileModel.getAppName());
-        System.out.println("WORK: "+languageFileModel.getAppName());
     }
 }
