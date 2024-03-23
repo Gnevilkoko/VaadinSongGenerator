@@ -35,12 +35,44 @@ public class SongSettingsViewModel extends ViewModelBase {
     @Override
     public void afterNavigation(AfterNavigationEvent event) {
         loadLanguageText();
+        loadListeners();
 
         super.afterNavigation(event);
+    }
+
+    private void loadListeners() {
+        view.getTabs().addSelectedChangeListener(event -> {
+            if(event.getSelectedTab().equals(view.getSongTextTab())){
+                view.getSongTextArea().setVisible(true);
+                view.getAboutSomethingTextField().setVisible(false);
+            } else {
+                view.getSongTextArea().setVisible(false);
+                view.getAboutSomethingTextField().setVisible(true);
+            }
+        });
     }
 
     @Override
     public void loadLanguageText() {
         title = languageFileModel.getAppName();
+
+        view.getAboutSomethingTab().setLabel(languageFileModel.getSongAboutTabName());
+
+        view.getSongTextTab().setLabel(languageFileModel.getSongTextTabName());
+
+        view.getNickTextField().setLabel(languageFileModel.addEnter(languageFileModel.getNicknameLabel()));
+
+        view.getAboutSomethingTextField().setLabel(languageFileModel.addEnter(languageFileModel.getSongAboutTabName()));
+        view.getAboutSomethingTextField().setPlaceholder(languageFileModel.getExampleSongAbout());
+
+        view.getSongTextArea().setLabel(languageFileModel.addEnter(languageFileModel.getSongTextTabName()));
+        view.getSongTextArea().setPlaceholder(languageFileModel.getExampleSongText());
+
+        view.getGenerateButton().setText(languageFileModel.getGenerateButtonLabel());
+
+        view.getSongStyleTextField().setLabel(languageFileModel.addEnter(languageFileModel.getSongStyle()));
+        view.getSongStyleTextField().setPlaceholder(languageFileModel.getExampleStyle());
+
+        view.getSongsOrderButton().setText(languageFileModel.getSongsOrderButton());
     }
 }

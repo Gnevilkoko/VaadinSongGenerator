@@ -1,2 +1,29 @@
-appname: "TestName"
-enter_nickname: "pelep"
+appname: "APP NAME"
+nickname: "Your nick"
+song_about_tab: "Song About"
+song_text_tab: "Text of the Song"
+song_style: "Song style"
+example_style: "salsa, 8-bit"
+example_song_about: "song about pineapple on the plate"
+example_song_text: "
+[Verse]\n
+Grill marks on a slab of beef, oh yeah\n
+Juicy steak, the flavor is my belief (ooh yeah)\n
+Chicken wing, crispy and savory\n
+Bite into it, you know it's legendary (mmm)\n
+\n
+[Verse 2]\n
+Take a sip, refreshing like no other\n
+Water's essential, it's what we discover (oh yeah)\n
+Clear and pure, hydrating to the core\n
+Quench your thirst, let it restore (ooh yeah)\n
+\n
+[Chorus]\n
+Meat and water, the perfect combination\n
+Protein power, a tasty sensation\n
+Savor the flavors, feel the energy\n
+Meat, water, protein, a divine synergy\n
+"
+enter: "Enter"
+generate_button: "Generate"
+songs_order_button: "Songs List & Order"

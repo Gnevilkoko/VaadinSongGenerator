@@ -1,0 +1,6 @@
+.song_settings_backgroundimage {
+      background-image: url("img/song_settings_forest_bg.jpg") !important;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center center;
+}
