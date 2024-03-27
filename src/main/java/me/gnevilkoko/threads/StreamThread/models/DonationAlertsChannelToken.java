@@ -2,20 +2,20 @@ package me.gnevilkoko.threads.StreamThread.models;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Map;
+import java.util.ArrayList;
 
 public class DonationAlertsChannelToken {
-    private Map<String, Channel> channels;
+    private ArrayList<Channel> channels;
 
-    public DonationAlertsChannelToken(Map<String, Channel> channels) {
+    public DonationAlertsChannelToken(ArrayList<Channel> channels) {
         this.channels = channels;
     }
 
-    public Map<String, Channel> getChannels() {
+    public ArrayList<Channel> getChannels() {
         return channels;
     }
 
-    public void setChannels(Map<String, Channel> channels) {
+    public void setChannels(ArrayList<Channel> channels) {
         this.channels = channels;
     }
 

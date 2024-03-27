@@ -4,18 +4,18 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-public class ChannelsSubscriptionData {
+public class DonationAlertsChannelsSubscriptionData {
     private ArrayList<String> channels;
 
     @SerializedName("client")
     private String centrifugoClientID;
 
-    public ChannelsSubscriptionData(String centrifugoClientID) {
+    public DonationAlertsChannelsSubscriptionData(String centrifugoClientID) {
         this.channels = new ArrayList<>();
         this.centrifugoClientID = centrifugoClientID;
     }
 
-    public ChannelsSubscriptionData() {
+    public DonationAlertsChannelsSubscriptionData() {
     }
 
     public void addChannel(String name){

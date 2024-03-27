@@ -3,7 +3,7 @@ package me.gnevilkoko.threads.StreamThread.models.WebSocketResponses;
 import java.util.Map;
 
 public class ResponseCentrifugoClientID extends WebSocketResponseBase{
-    private int id;
+    private long id;
     private Map<String, String> result;
 
     public ResponseCentrifugoClientID(int id, Map<String, String> result) {
@@ -22,11 +22,11 @@ public class ResponseCentrifugoClientID extends WebSocketResponseBase{
         return result.get("version");
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

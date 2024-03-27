@@ -72,8 +72,8 @@ public class DonationAlertsAccesTokenConfig extends YamlModel {
     public String getSocketConnectionToken(){
         return (String) getData().get("socket_connection_token");
     }
-    public long getUserID(){
-        return (long) getData().get("user_id");
+    public int getUserID(){
+        return (int) getData().get("user_id");
     }
 
     public enum Names {

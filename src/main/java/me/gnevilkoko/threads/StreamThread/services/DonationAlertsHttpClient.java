@@ -5,8 +5,8 @@ import me.gnevilkoko.data.YamlParser;
 import me.gnevilkoko.data.YamlReader;
 import me.gnevilkoko.models.yaml.YamlModel;
 import me.gnevilkoko.services.HttpClient;
-import me.gnevilkoko.threads.StreamThread.models.ChannelsSubscriptionData;
 import me.gnevilkoko.threads.StreamThread.models.DonationAlertsChannelToken;
+import me.gnevilkoko.threads.StreamThread.models.DonationAlertsChannelsSubscriptionData;
 import me.gnevilkoko.threads.StreamThread.models.DonationAlertsConfig;
 import me.gnevilkoko.threads.StreamThread.models.DonationAlertsUserData;
 import okhttp3.MediaType;
@@ -44,7 +44,7 @@ public class DonationAlertsHttpClient extends HttpClient {
         return get("https://www.donationalerts.com/api/v1/user/oauth", DonationAlertsUserData.class, headers);
     }
 
-    public CompletableFuture<DonationAlertsChannelToken> getDonationAlertsChannelToken(String userToken, ChannelsSubscriptionData subscriptionData){
+    public CompletableFuture<DonationAlertsChannelToken> getDonationAlertsChannelToken(String userToken, DonationAlertsChannelsSubscriptionData subscriptionData){
         MediaType mediaType = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(mediaType, getGson().toJson(subscriptionData));
 

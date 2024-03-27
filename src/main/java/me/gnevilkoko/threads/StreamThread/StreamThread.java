@@ -45,8 +45,8 @@ public class StreamThread extends ThreadBase {
             DonationAlertsAccesTokenConfig accesTokenConfig = new DonationAlertsAccesTokenConfig(fullUrl);
             DonationAlertsUserData user = donationAlertsClient.getDonationAlertsUserData(accesTokenConfig.getFullToken()).get();
 
-            accesTokenConfig.put("socket_connection_token", user.getSocketConnectionToken());
-            accesTokenConfig.put("user_id", user.getUserID());
+            accesTokenConfig.put("socket_connection_token", user.getData().getSocketConnectionToken());
+            accesTokenConfig.put("user_id", user.getData().getId());
             accesTokenConfig.save("donationalerts_credentials.yml");
         } catch (NotEnoughKeyPairsException | InterruptedException | ExecutionException e) {
             e.printStackTrace();

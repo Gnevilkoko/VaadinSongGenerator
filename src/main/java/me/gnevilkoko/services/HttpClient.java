@@ -38,6 +38,7 @@ public class HttpClient implements HttpClientInterface {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 if (response.isSuccessful() && response.body() != null) {
                     String json = response.body().string();
+                    System.out.println(json);
                     T object = gson.fromJson(json, clazz);
                     future.complete(object);
                 } else {
@@ -65,20 +66,16 @@ public class HttpClient implements HttpClientInterface {
         client.newCall(builder.build()).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                System.out.println("FAIL");
                 future.completeExceptionally(e);
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                System.out.println("OKAY");
                 if (response.isSuccessful() && response.body() != null) {
-                    System.out.println("PELEP");
                     String json = response.body().string();
                     T object = gson.fromJson(json, clazz);
                     future.complete(object);
                 } else {
-                    System.out.println("KABOm");
                     future.completeExceptionally(new HttpClientException(response));
                 }
             }

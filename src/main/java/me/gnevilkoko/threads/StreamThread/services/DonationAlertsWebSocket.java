@@ -4,10 +4,12 @@ import me.gnevilkoko.Application;
 import me.gnevilkoko.data.YamlParser;
 import me.gnevilkoko.data.YamlReader;
 import me.gnevilkoko.models.yaml.YamlModel;
-import me.gnevilkoko.threads.StreamThread.models.ChannelsSubscriptionData;
 import me.gnevilkoko.threads.StreamThread.models.DonationAlertsAccesTokenConfig;
+import me.gnevilkoko.threads.StreamThread.models.DonationAlertsChannelToken;
+import me.gnevilkoko.threads.StreamThread.models.DonationAlertsChannelsSubscriptionData;
 import me.gnevilkoko.threads.StreamThread.models.WebSocketBase;
 import me.gnevilkoko.threads.StreamThread.models.WebSocketRequests.RequestCentrifugoClientID;
+import me.gnevilkoko.threads.StreamThread.models.WebSocketRequests.RequestDonationSubscription;
 import me.gnevilkoko.threads.StreamThread.models.WebSocketResponses.ResponseCentrifugoClientID;
 import okhttp3.Response;
 import okhttp3.WebSocket;
@@ -44,13 +46,13 @@ public class DonationAlertsWebSocket extends WebSocketBase {
     @Override
     public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
         System.out.println(text);
-        centrifugoClientID = getGson().fromJson(text, ResponseCentrifugoClientID.class);
+        if(text.startsWith("{\"id\":1")){
+            centrifugoClientID = getGson().fromJson(text, ResponseCentrifugoClientID.class);
 
-        ChannelsSubscriptionData subscriptionData = new ChannelsSubscriptionData(centrifugoClientID.getClientID());
-        subscriptionData.addChannel("$alerts:donation_"+credentials.getUserID());
+            subscribeOnDonations();
+        }
 
-        System.out.println("WORK");
-        httpClient.getDonationAlertsChannelToken(credentials.getFullToken(), subscriptionData).thenAccept(t -> System.out.println(t.getChannels().get(0).getName()));
+
 
         super.onMessage(webSocket, text);
     }
@@ -63,9 +65,26 @@ public class DonationAlertsWebSocket extends WebSocketBase {
         super.onOpen(webSocket, response);
     }
 
-    public void requestCentrifugoClientID(){
+    private void requestCentrifugoClientID(){
         Application.sendMessage("Requesting centrifugo client ID...");
 
         sendMessage(new RequestCentrifugoClientID(credentials.getSocketConnectionToken()));
+    }
+
+    private void subscribeOnDonations() {
+        Application.sendMessage("Subscribing on donations...");
+        String channelID = "$alerts:donation_"+credentials.getUserID();
+        DonationAlertsChannelsSubscriptionData subscriptionData = new DonationAlertsChannelsSubscriptionData(centrifugoClientID.getClientID());
+        subscriptionData.addChannel(channelID);
+
+        httpClient.getDonationAlertsChannelToken(credentials.getFullToken(), subscriptionData).thenAccept(channelToken -> {
+            if(channelToken.getChannels().size() == 0){
+                Application.sendMessage("Can't subscribe on the channel");
+                Application.stopWithError();
+            }
+
+            DonationAlertsChannelToken.Channel channel = channelToken.getChannels().get(0);
+            sendMessage(new RequestDonationSubscription(channel.getToken(), channel.getName()));
+        });
     }
 }
