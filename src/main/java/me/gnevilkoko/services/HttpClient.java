@@ -20,10 +20,15 @@ public class HttpClient implements HttpClientInterface {
 
     @NotNull
     @Override
-    public <T> CompletableFuture<T> get(String url, Class<T> clazz) {
+    public <T> CompletableFuture<T> get(String url, Class<T> clazz, Map<String, String> headers) {
         CompletableFuture<T> future = new CompletableFuture<>();
 
-        client.newCall(new Request.Builder().url(url).build()).enqueue(new Callback() {
+        Request.Builder builder = new Request.Builder().url(url);
+        for (String key : headers.keySet()) {
+            builder.addHeader(key, headers.get(key));
+        }
+
+        client.newCall(builder.build()).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 future.completeExceptionally(e);
@@ -46,17 +51,18 @@ public class HttpClient implements HttpClientInterface {
 
     @NotNull
     @Override
-    public <T> CompletableFuture<T> post(String url, RequestBody body, Class<T> clazz) {
-        System.out.println("POST");
-
-        Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .build();
-
+    public <T> CompletableFuture<T> post(String url, RequestBody body, Map<String, String> headers, Class<T> clazz) {
         CompletableFuture<T> future = new CompletableFuture<>();
 
-        client.newCall(request).enqueue(new Callback() {
+        Request.Builder builder = new Request.Builder()
+                .url(url)
+                .post(body);
+
+        for (String key : headers.keySet()) {
+            builder.addHeader(key, headers.get(key));
+        }
+
+        client.newCall(builder.build()).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 System.out.println("FAIL");
@@ -97,5 +103,9 @@ public class HttpClient implements HttpClientInterface {
 
 
         return sb.toString();
+    }
+
+    public Gson getGson() {
+        return gson;
     }
 }

@@ -1,13 +1,19 @@
 package me.gnevilkoko.threads.StreamThread;
 
 import me.gnevilkoko.Application;
+import me.gnevilkoko.data.YamlParser;
+import me.gnevilkoko.data.YamlReader;
 import me.gnevilkoko.exceptions.NotEnoughKeyPairsException;
+import me.gnevilkoko.models.yaml.YamlModel;
 import me.gnevilkoko.threads.StreamThread.models.DonationAlertsAccesTokenConfig;
+import me.gnevilkoko.threads.StreamThread.models.DonationAlertsUserData;
 import me.gnevilkoko.threads.StreamThread.services.DonationAlertsHttpClient;
+import me.gnevilkoko.threads.StreamThread.services.DonationAlertsWebSocket;
 import me.gnevilkoko.threads.ThreadBase;
 
 import java.io.File;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
 
 public class StreamThread extends ThreadBase {
     private DonationAlertsHttpClient donationAlertsClient = new DonationAlertsHttpClient();
@@ -15,15 +21,17 @@ public class StreamThread extends ThreadBase {
     @Override
     public void run() {
         if(!isDonationTokenExist()){
-            generateDonationToken();
+            getDonationCredentials();
         }
 
+        YamlModel yamlModel = new YamlParser().parse(new YamlReader("donationalerts_credentials.yml"));
+        DonationAlertsAccesTokenConfig donationAlertsAccesTokenConfig = new DonationAlertsAccesTokenConfig(yamlModel);
 
-
+        DonationAlertsWebSocket donationAlertsWebSocket = new DonationAlertsWebSocket();
         super.run();
     }
 
-    private void generateDonationToken(){
+    private void getDonationCredentials(){
         Scanner scanner = new Scanner(System.in);
 
         Application.sendMessage("1. Please, go to this link and allow using API:\n"+ donationAlertsClient.getUserAuthorizationDataLink());
@@ -33,16 +41,18 @@ public class StreamThread extends ThreadBase {
         String fullUrl = scanner.nextLine();
 
         Application.sendMessage("Parsing...");
-        DonationAlertsAccesTokenConfig accesTokenConfig = null;
         try {
-            accesTokenConfig = new DonationAlertsAccesTokenConfig(fullUrl);
-        } catch (NotEnoughKeyPairsException e) {
+            DonationAlertsAccesTokenConfig accesTokenConfig = new DonationAlertsAccesTokenConfig(fullUrl);
+            DonationAlertsUserData user = donationAlertsClient.getDonationAlertsUserData(accesTokenConfig.getFullToken()).get();
+
+            accesTokenConfig.put("socket_connection_token", user.getSocketConnectionToken());
+            accesTokenConfig.put("user_id", user.getUserID());
+            accesTokenConfig.save("donationalerts_credentials.yml");
+        } catch (NotEnoughKeyPairsException | InterruptedException | ExecutionException e) {
             e.printStackTrace();
             Application.stopWithError();
         }
         Application.sendMessage("Parsed successfully");
-
-        accesTokenConfig.save("donationalerts_credentials.yml");
     }
 
     private boolean isDonationTokenExist(){

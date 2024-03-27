@@ -1,13 +1,8 @@
 package me.gnevilkoko.threads.StreamThread.models;
 
-import me.gnevilkoko.Application;
 import me.gnevilkoko.exceptions.NotEnoughKeyPairsException;
 import me.gnevilkoko.models.yaml.YamlModel;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -68,6 +63,17 @@ public class DonationAlertsAccesTokenConfig extends YamlModel {
 
     public long getExpiresIn(){
         return (long) getData().get(Names.EXPIRES_IN.getKey());
+    }
+
+    public String getFullToken(){
+        return getTokenType()+" "+getAccessToken();
+    }
+
+    public String getSocketConnectionToken(){
+        return (String) getData().get("socket_connection_token");
+    }
+    public long getUserID(){
+        return (long) getData().get("user_id");
     }
 
     public enum Names {

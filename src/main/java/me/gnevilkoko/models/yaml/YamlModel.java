@@ -38,6 +38,10 @@ public class YamlModel extends ModelBase {
         } catch (FileNotFoundException ignored) {}
     }
 
+    public void put(String key, Object value){
+        data.put(key, value);
+    }
+
     @Override
     public String toString() {
         return data.toString();
